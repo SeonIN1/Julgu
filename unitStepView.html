@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+  <title>Starter Template · Bootstrap v4.6</title>
+
+  <!-- Bootstrap core CSS -->
+  <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">  
+  <!-- Real Grid -->
+  <link href="./realgrid/realgrid-style.css" rel="stylesheet">
+  <script src="./realgrid/realgrid.2.3.3.min.js"></script>
+  <script src="./realgrid/libs/jszip.min.js"></script>
+
+  <!-- Toast Editor -->
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
+
+  <!-- Custom styles for this template -->
+  <link href="./css/common.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link href="./css/unitPstepView.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">KOOK</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="./index.html">Process</a>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="./unitStepView.html">Step</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link disabled">Disabled</a>
+        </li> -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" id="dropdown01" data-toggle="dropdown" aria-expanded="false">Previous</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">단위프로세스</a>
+            <a class="dropdown-item" href="#">단위프로세스(스텝)</a>
+            <a class="dropdown-item" href="#">공통코드</a>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" id="userInfoDropdown" href="#" id="dropdown01" data-toggle="dropdown" aria-expanded="false">Previous</a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+            <a class="dropdown-item" id="userInfoID" href="#!"></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="${contextPath}/logout">Logout</a>
+          </div>
+        </li>
+      </ul>
+      <!-- <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+    </div>
+  </nav>
+  <main role="main" class="container">
+    <div class="starter-template">
+      <h4>단위프로세스-단계내용(아직 조회만 가능합니다)</h4>
+      <div class="seletArea row col-9">
+        <select class="form-control col-2" id="proc_lrcl_cd" onchange="setCCC002()">
+          <option value="" selected="selected">선택해주세요</option>
+        </select>
+        <select class="form-control col-2" id="proc_mdcl_cd" onchange="setCCC003()"></select>
+        <select class="form-control col-2" id="proc_smcl_cd"></select>
+        <div class="dropdown" data-toggle="tooltip" data-placement="right" title="중분류까지 선택 시 클릭하면 프로세스 목록이 보입니다" style="cursor: pointer;">
+            <span class="input-group-text dropdown-toggle" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" style="margin-right: 2px;"><i class="bi bi-search"></i></span>
+            <div id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                <a class="dropdown-item dd-ProcList">표시할 프로세스가 없습니다</a>
+            </div>
+        </div>
+        <input id="procId" class="form-control col-1" readonly style="font-weight: bold;">
+        <input id="procName" class="form-control col-2" readonly style="font-weight: bold;">
+        <button class="btn btn-info">이미지확장</button>
+      </div>
+      <div class="mainArea">
+        <div class="gridArea col-6">
+            <div id="stepTreeGrid" class="stepTreeGrid"></div>
+        </div>
+        <div class="detailArea col-3">
+            <div class="ctnArea">
+                <div class="card ctnInfoArea">
+                    <div class="card-header">속성상세</div>
+                    <div class="card-body">
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">연결프로세스ID</label>
+                            <input id="LNKN_PROC_ID" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">연결단계ID</label>
+                            <input id="LNKN_STEP_ID" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">공통여부</label>
+                            <input id="COMN_STEP_YN" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">분기여부</label>
+                            <input id="QTR_YN" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">반복여부</label>
+                            <input id="REPT_YN" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">수행인원코드</label>
+                            <input id="PRFM_PRSN_CD" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">수행인원내용</label>
+                            <input id="PRFM_PRSN_CTN" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">InputVO</label>
+                            <input id="INPUT_IO" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                        <div class="row ctnInfoGroup">
+                            <label class="col-4" style="top: 4px;">OutputVO</label>
+                            <input id="OUT_IO" class="form-control form-control-sm col-8" type="text" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card ctnTextArea">
+                    <div class="card-header">단계내용</div>
+                    <div class="card-body"">
+                      <p id="c-stepCtn" class="card-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="propArea col-3">
+            <div class="propGridArea">
+                <div id="stepPropGrid" class="stepPropGrid"></div>
+            </div>
+            <div class="propImagArea">
+                <div class="card">
+                    <div class="card-header">Image</div>
+                    <div id="thumbnail" class="card-body">
+                        <!-- <img src="./img/test.png" class="img-thumbnail" alt="..."> -->
+                        <!-- <img src="./img/test.png" class="img-thumbnail" alt="..."> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </main><!-- /.container -->
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./js/unitPstepView.js"></script>
+
+  <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+  <script>
+    const realGrid2Lic = "upVcPE+wPOmtLjqyBIh9RkM/nBOseBrflwxYpzGZyYmf0p0NzaD/UGp5TZmtDv/s/NIW4NiE7ye99/vc60f9i/zSFuDYhO8n5FWoeNFAGterVC5AjTeyHVvbelftwmJ2pzTSJoFVyNeLmrqK4xhR4kYeXTIC2fYTRZ8IdzC3lzGGfnABQhKm+Rqu6PpPvPE3Zue8h1ZHbPM=";
+    const contextPath = "http://localhost:18087/KOOK/";
+    // const contextPath = "http://localhost:8080/KOOK/";
+    // const loginId = "<%=(String)session.getAttribute("login_user")%>";  //로그인 아이디
+    // const userName = "<%=(String)session.getAttribute("USER_NAME")%>";  //이름
+    const loginId = "HN999";    //로그인 아이디
+    const userName = "테스트";  //이름
+    document.getElementById('userInfoDropdown').innerText = userName;
+    document.getElementById('userInfoID').innerText = loginId;
+  </script>
+</body>
+</html>

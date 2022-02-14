@@ -1,0 +1,135 @@
+body {
+    padding-top: 3.8rem;
+  }
+
+.seletArea.row {
+    margin-bottom: 5px;
+}
+  
+.seletArea.row .form-control{
+    margin-right: 3px;
+}
+
+.mainArea {
+    display: flex;
+    height: 750px;
+    /* border: 1px solid orange; */
+}
+
+.mainArea .gridArea {
+    padding: 0;
+    height: 100%;
+}
+
+.mainArea .gridArea .stepTreeGrid {
+    width: 100%;
+    height: 100%;
+}
+
+.mainArea .detailArea {
+    /* border: 1px solid green; */
+}
+
+.mainArea .detailArea .ctnArea{
+    height: 100%;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnInfoArea {
+    height: 50%;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnInfoArea .card-header {
+    font-weight: bold;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnInfoArea .card-body {
+    padding: 0;
+    padding-top: 1.0rem;
+    overflow-y:auto; 
+    overflow-x:hidden; 
+    width:100%; 
+    height:100%;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnInfoArea .card-body .ctnInfoGroup {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0.1rem;
+    font-size: .875rem;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnInfoArea .card-body .ctnInfoGroup .form-control {
+    background-color: white;
+}   
+
+.mainArea .detailArea .ctnArea .card.ctnTextArea {
+    height: 50%;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnTextArea .card-header {
+    font-weight: bold;
+}
+
+.mainArea .detailArea .ctnArea .card.ctnTextArea .card-body {
+    padding: 1.0rem;
+    /* padding-top: 1.0rem; */
+    /* padding-left: 1.0rem; */
+    overflow-y:auto; 
+    overflow-x:hidden; 
+    width:100%; 
+    height:100%;
+}
+
+.mainArea .propArea {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.mainArea .propArea .propGridArea {
+    height: 50%;
+}
+
+.mainArea .propArea .propGridArea .stepPropGrid{
+    width: 100%;
+    height: 100%;
+}
+
+.mainArea .propArea .propImagArea {
+    height: 50%;
+}
+
+.mainArea .propArea .propImagArea .card {
+    height: 100%;
+}
+
+.mainArea .propArea .propImagArea .card .card-header {
+    font-weight: bold;
+}
+
+.mainArea .propArea .propImagArea .card .card-body {
+    padding: 0;
+    overflow-y:auto; 
+    overflow-x:hidden; 
+    width:100%; 
+    height:100%;
+    cursor: pointer;
+}
+
+.mainArea .propArea .propImagArea .card .card-body .img-thumbnail {
+    margin-bottom: 3px;
+}
+
+/* QHD */
+@media (min-width: 1921px) {
+	.mainArea {
+	    display: flex;
+	    height: 1100px;
+	    /* border: 1px solid orange; */
+	}
+	
+	.mainArea .gridArea {
+	    padding: 0;
+	    height: 100%;
+	}
+
+}
