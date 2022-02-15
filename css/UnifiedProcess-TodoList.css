@@ -7,6 +7,10 @@ body {
     padding-right: 2rem;
 }
 
+.optionArea {
+    margin-left: 0;
+}
+
 .contentArea {
     display: flex;
     border: 1px solid orange;
@@ -14,34 +18,18 @@ body {
 }
 
 .contentArea .UnifiedProcessListArea {
-    padding: 0;
-    height: 100%;
-    border: 1px solid black;
-}
-
-.contentArea .UnifiedProcessListArea .comboArea {
-    height: 15%;
+    /* height: 100%; */
+    padding-left: 0;
 }
 
 .contentArea .UnifiedProcessListArea .processGridArea {
-    padding: 0;
-    width: 100%;
-    height: 85%;
+    height: 100%;
 }
 
-.contentArea .UnifiedProcessListArea .processGridArea .realgrid {
-    width: 100%;
+.contentArea .UnifiedProcessListArea .processGridArea .unifiedListGrid {
     height: 100%;
 }
 
 .contentArea .toDoListArea {
-    border: 1px solid purple;
-}
-
-.contentArea .toDoListArea .optionArea{
-    display: flex;
-}
-
-.contentArea .toDoListArea .optionArea .checkbox-inline{
-    margin-right: 10px;
+    
 }

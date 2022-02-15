@@ -61,7 +61,7 @@ let columns = [
 ];
 
 function createGrid() {
-    container = document.getElementById('realgrid');
+    container = document.getElementById('unifiedListGrid');
     provider = new RealGrid.LocalDataProvider(false);
     gridView = new RealGrid.GridView(container);
     gridView.setDataSource(provider);
@@ -125,3 +125,69 @@ function createGrid() {
         console.log(error);
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* **************************************************************************************************** */
+let toDocontainer, toDoprovider, toDogridView;
+
+let toDofields = [
+    {fieldName:"PROC_ID", dataType:"text"},
+    {fieldName:"PROC_NM", dataType:"text"},
+    {fieldName:"PROC_CTN", dataType:"text"},
+    {fieldName:"DETL_PROC_CTN", dataType:"text"},
+    {fieldName:"PROC_DVCN_CD", dataType:"text"},
+    {fieldName:"PROC_LRCL_CD", dataType:"text"},
+    {fieldName:"PROC_MDCL_CD", dataType:"text"},
+    {fieldName:"PROC_SMCL_CD", dataType:"text"},
+    {fieldName:"USE_YN", dataType:"text"},
+    {fieldName:"INQR_SQNC", dataType:"text"},
+    {fieldName:"HGRN_PROC_ID", dataType:"text"},
+    {fieldName:"CSUT_GRP_CD", dataType:"text"},
+
+    
+
+    {fieldName:"FRST_RGSR_ID", dataType:"text"},
+    {fieldName:"FRST_RGST_IP", dataType:"text"},
+    {fieldName:"FRST_RGST_DT", dataType:"text"},
+    {fieldName:"LAST_UPDR_ID", dataType:"text"},
+    {fieldName:"LAST_UPDT_IP", dataType:"text"},
+    {fieldName:"LAST_UPDT_DT", dataType:"text"},
+]
+
+let toDocolumns = [
+	{fieldName:"PROC_ID", name:"PROC_ID", width:65, header:{text:"프로세스ID" }, footer: {expression: "count"},styleName: "textLeft"},
+	{fieldName:"PROC_NM", name:"PROC_NM", width:210, header:{text:"프로세스명" }, styleName: "textLeft", popupMenu: "menu1",button: "popup"},
+	{fieldName:"PROC_CTN", name:"PROC_CTN", width:300, header:{text:"프로세스 내용" }, styleName: "textLeft",},
+	{fieldName:"DETL_PROC_CTN", name:"DETL_PROC_CTN", header:{text: "프로세스 내용(개발자)"}},
+	{fieldName:"PROC_DVCN_CD", name:"PROC_DVCN_CD", width:60, header:{text: "구분코드"}},
+	{fieldName:"PROC_LRCL_CD", name:"PROC_LRCL_CD", width:60, header:{text: "대분류"}},
+	{fieldName:"PROC_MDCL_CD", name:"PROC_MDCL_CD", width:60, header:{text: "중분류"}},
+	{fieldName:"PROC_SMCL_CD", name:"PROC_SMCL_CD", header:{text: "소분류"}},
+	{fieldName:"USE_YN", name:"USE_YN", header:{text: "사용여부"}},
+	{fieldName:"INQR_SQNC", name:"INQR_SQNC", header:{text: "조회순서"}},
+	{fieldName:"HGRN_PROC_ID", name:"HGRN_PROC_ID", header:{text: "상위프로세스ID"}},
+	{fieldName:"CSUT_GRP_CD", name:"CSUT_GRP_CD", header:{text: "컨설팅그룹코드"}},
+
+
+
+	{fieldName:"FRST_RGSR_ID", name:"FRST_RGSR_ID", header:{text: "최초등록자ID"}},
+	{fieldName:"FRST_RGST_IP", name:"FRST_RGST_IP", header:{text: "최초등록IP"}},
+	{fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
+	{fieldName:"LAST_UPDR_ID", name:"LAST_UPDR_ID", header:{text: "최종수정자ID"}},
+	{fieldName:"LAST_UPDT_IP", name:"LAST_UPDT_IP", header:{text: "최종수정IP"}},
+	{fieldName:"LAST_UPDT_DT", name:"LAST_UPDT_DT", header:{text: "LAST_UPDT_DT"}},
+];

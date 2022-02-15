@@ -74,30 +74,30 @@
   <main role="main" class="container"> <!-- blanchedalmond, bisque -->
     <div class="starter-template">
         <h3>통합프로세스-ToDoList</h3>
-        <div class="contentArea">
-            <div class="UnifiedProcessListArea col-2">
-                <div class="comboArea">
-                    <select class="form-control" id=""></select>
-                    <select class="form-control" id=""></select>
-                    <select class="form-control" id=""></select>
-                </div>
-                <div class="processGridArea">
-                    <div id="realgrid" class="realgrid"></div>
-                </div>
-            </div>
-            <div class="toDoListArea col-7">
-                <div class="optionArea">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="inlineCheckbox1" value="option1"> 내 담당글 보기
-                    </label>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="inlineCheckbox2" value="option2"> 미완료
-                    </label>
-                </div>
-
-            </div>
-
+        <div class="optionArea row">
+          <div class="col-2" style="padding-left: 0;">
+          </div>
+          <div class="col-7" style="padding-left: 0;">
+            <label class="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox1" value="option1"> 내 담당글 보기
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox2" value="option2"> 미완료
+            </label>
+          </div>
         </div>
+        <div class="contentArea">
+          <div class="UnifiedProcessListArea col-2">
+            <div class="processGridArea">
+                <div id="unifiedListGrid" class="unifiedListGrid"></div>
+            </div>
+          </div>
+          <div class="toDoListArea col-7">
+            <div class="toDoListGridArea">
+              <div id="toDoListGrid" class="toDoListGridArea"></div>
+            </div>
+          </div>
+        </div> <!-- / .contentArea -->
     </div>
   </main><!-- /.container -->
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
