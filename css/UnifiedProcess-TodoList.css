@@ -3,8 +3,8 @@ body {
 }
 
 .starter-template {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
 }
 
 .optionArea {
@@ -13,7 +13,7 @@ body {
 
 .contentArea {
     display: flex;
-    border: 1px solid orange;
+    border: 1px solid blanchedalmond;
     height: 800px;
 }
 
@@ -31,5 +31,33 @@ body {
 }
 
 .contentArea .toDoListArea {
-    
+    padding-left: 0;
+}
+
+.contentArea .toDoListArea .toDoListGridArea {
+    height: 60%;
+}
+
+.contentArea .toDoListArea .toDoListGridArea .toDoListGrid {
+    height: 100%;
+}
+
+.contentArea .toDoListArea .toDoAskArea {
+    height: 40%;
+}
+
+.contentArea .toDoListArea .toDoAskArea .toDoAskCtn {
+    height: 100%;
+    border: 1px solid gray;
+}
+
+
+/* QHD */
+@media (min-width: 1921px) {
+	.contentArea {
+	    display: flex;
+	    height: 1100px;
+	}
+	
+
 }

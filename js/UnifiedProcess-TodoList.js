@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
     createGrid();
+    createTodoListGrid();
 });
 
 let container, provider, gridView;
@@ -127,67 +128,93 @@ function createGrid() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* **************************************************************************************************** */
-let toDocontainer, toDoprovider, toDogridView;
+// ToDoList Grid
+let toDoContainer, toDoProvider, toDoGridView;
 
-let toDofields = [
-    {fieldName:"PROC_ID", dataType:"text"},
-    {fieldName:"PROC_NM", dataType:"text"},
-    {fieldName:"PROC_CTN", dataType:"text"},
-    {fieldName:"DETL_PROC_CTN", dataType:"text"},
-    {fieldName:"PROC_DVCN_CD", dataType:"text"},
-    {fieldName:"PROC_LRCL_CD", dataType:"text"},
-    {fieldName:"PROC_MDCL_CD", dataType:"text"},
-    {fieldName:"PROC_SMCL_CD", dataType:"text"},
-    {fieldName:"USE_YN", dataType:"text"},
-    {fieldName:"INQR_SQNC", dataType:"text"},
-    {fieldName:"HGRN_PROC_ID", dataType:"text"},
-    {fieldName:"CSUT_GRP_CD", dataType:"text"},
+let toDoFields = [
+    {fieldName:"PROC_ID", dataType:"text"},      // 프로세스 ID
+    {fieldName:"PROC_NM", dataType:"text"},      // 프로세스 명
+    {fieldName:"STEP_ID", dataType:"text"},      // No
+    {fieldName:"STEP_NM", dataType:"text"},      // 단계ID
+    {fieldName:"FRST_RGST_DT", dataType:"text"}, // 등록일 
+    {fieldName:"COMPL_ST", dataType:"text"},     // 완료여부
+    {fieldName:"WR_UNIT", dataType:"text"},      // 업무구분
+    {fieldName:"TODO_ASK", dataType:"text"},     // 의뢰내용
+    {fieldName:"TODO_ASNM", dataType:"text"},    // 수행인원
 
-    
-
-    {fieldName:"FRST_RGSR_ID", dataType:"text"},
+    {fieldName:"FRST_RGSR_ID", dataType:"text"}, 
     {fieldName:"FRST_RGST_IP", dataType:"text"},
-    {fieldName:"FRST_RGST_DT", dataType:"text"},
     {fieldName:"LAST_UPDR_ID", dataType:"text"},
     {fieldName:"LAST_UPDT_IP", dataType:"text"},
     {fieldName:"LAST_UPDT_DT", dataType:"text"},
 ]
 
-let toDocolumns = [
-	{fieldName:"PROC_ID", name:"PROC_ID", width:65, header:{text:"프로세스ID" }, footer: {expression: "count"},styleName: "textLeft"},
-	{fieldName:"PROC_NM", name:"PROC_NM", width:210, header:{text:"프로세스명" }, styleName: "textLeft", popupMenu: "menu1",button: "popup"},
-	{fieldName:"PROC_CTN", name:"PROC_CTN", width:300, header:{text:"프로세스 내용" }, styleName: "textLeft",},
-	{fieldName:"DETL_PROC_CTN", name:"DETL_PROC_CTN", header:{text: "프로세스 내용(개발자)"}},
-	{fieldName:"PROC_DVCN_CD", name:"PROC_DVCN_CD", width:60, header:{text: "구분코드"}},
-	{fieldName:"PROC_LRCL_CD", name:"PROC_LRCL_CD", width:60, header:{text: "대분류"}},
-	{fieldName:"PROC_MDCL_CD", name:"PROC_MDCL_CD", width:60, header:{text: "중분류"}},
-	{fieldName:"PROC_SMCL_CD", name:"PROC_SMCL_CD", header:{text: "소분류"}},
-	{fieldName:"USE_YN", name:"USE_YN", header:{text: "사용여부"}},
-	{fieldName:"INQR_SQNC", name:"INQR_SQNC", header:{text: "조회순서"}},
-	{fieldName:"HGRN_PROC_ID", name:"HGRN_PROC_ID", header:{text: "상위프로세스ID"}},
-	{fieldName:"CSUT_GRP_CD", name:"CSUT_GRP_CD", header:{text: "컨설팅그룹코드"}},
-
-
+let toDoColumns = [
+	{fieldName:"PROC_ID", name:"PROC_ID", header:{text:"프로세스ID"}},
+	{fieldName:"PROC_NM", name:"PROC_NM", header:{text:"프로세스명"}},
+    {fieldName:"STEP_ID", name:"PROC_ID", header:{text:"단계ID"}},
+    {fieldName:"TODO_ASK", name:"TODO_ASK", header:{text:"의뢰내용"}},
+    {fieldName:"TODO_ASNM", name:"TODO_ASNM", header:{text:"수행인원"}},
+    {fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
+    {fieldName:"WR_UNIT", name:"WR_UNIT", header:{text:"업무구분"}},
+    {fieldName:"COMPL_ST", name:"COMPL_ST", header:{text:"완료여부"}},
 
 	{fieldName:"FRST_RGSR_ID", name:"FRST_RGSR_ID", header:{text: "최초등록자ID"}},
 	{fieldName:"FRST_RGST_IP", name:"FRST_RGST_IP", header:{text: "최초등록IP"}},
-	{fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
 	{fieldName:"LAST_UPDR_ID", name:"LAST_UPDR_ID", header:{text: "최종수정자ID"}},
 	{fieldName:"LAST_UPDT_IP", name:"LAST_UPDT_IP", header:{text: "최종수정IP"}},
 	{fieldName:"LAST_UPDT_DT", name:"LAST_UPDT_DT", header:{text: "LAST_UPDT_DT"}},
 ];
+
+function createTodoListGrid() {
+    toDoContainer = document.getElementById('toDoListGrid');
+    toDoProvider = new RealGrid.LocalDataProvider(false);
+    toDoGridView = new RealGrid.GridView(toDoContainer);
+    toDoGridView.setDataSource(toDoProvider);
+
+    toDoProvider.setFields(toDoFields);
+    toDoGridView.setColumns(toDoColumns);
+
+    toDoGridView.setDisplayOptions({showEmptyMessage: true});
+    toDoGridView.displayOptions.emptyMessage = "표시할 ToDoList가 없습니다.";
+
+    toDoGridView.displayOptions.rowHeight = 30;
+    toDoGridView.header.height = 30;
+    toDoGridView.footer.height = 10;
+    toDoGridView.stateBar.width = 16;
+
+    toDoGridView.setCheckBar({visible: false}); // 그리드 체크 박스 표시
+    toDoGridView.setRowIndicator({visible: false}); // 그리드 행수 표시
+    toDoGridView.setStateBar({visible: false}); // 그리드에서 입력,수정,삭제 표시
+    toDoGridView.setDisplayOptions({focusVisible:false}); // 포커스 표시 여부
+    toDoGridView.displayOptions.rowFocusType = "row"; // 그리드 한줄 선택
+
+    // ReadOnly
+	// 그리드 컬럼들의 editable 상태를 편히 관리하기 위해 컬럼 마다 관리
+	toDoColumns.forEach((element) => {
+		toDoGridView.columnByName(element.name).editable = false;
+	});
+
+    toDoGridView.displayOptions.fitStyle = "evenFill"; // 그리드 꽉 채우기
+    // 컬럼 표시 여부
+    const colVisible = false;
+    toDoGridView.columnByName("FRST_RGSR_ID").visible =  colVisible; 
+    toDoGridView.columnByName("FRST_RGST_IP").visible =  colVisible; 
+    toDoGridView.columnByName("LAST_UPDR_ID").visible =  colVisible; 
+    toDoGridView.columnByName("LAST_UPDT_IP").visible =  colVisible; 
+    toDoGridView.columnByName("LAST_UPDT_DT").visible =  colVisible;
+
+    // setColumnProperty
+
+
+}
+
+
+
+
+
+
+
+
+

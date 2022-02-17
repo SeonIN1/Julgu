@@ -115,7 +115,8 @@ function createGrid() {
 
     treeView.setDisplayOptions({showEmptyMessage: true});
 	treeView.displayOptions.emptyMessage = "표시할 STEP이 없습니다.";
-    treeView.displayOptions.rowHeight = 30;
+    // treeView.displayOptions.rowHeight = 30;
+    treeView.displayOptions.rowHeight = -1;
     treeView.header.height = 35;
     treeView.footer.height = 20;
     treeView.stateBar.width = 16;

@@ -39,6 +39,7 @@
 
 .textLeft {
 	text-align: left;
+	white-space: pre-line;
 }
 
 .parentsRowColor {
