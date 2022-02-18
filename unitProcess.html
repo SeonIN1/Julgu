@@ -31,7 +31,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link disabled" href="#">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="#">Step</a>
@@ -67,7 +67,7 @@
   <main role="main" class="container-fluid"> <!-- container-fluid -->
     <div class="starter-template">
       <h4>단위프로세스</h4>
-      <div class="seletArea row col-9">
+      <div id="seletArea" class="seletArea row col-9">
         <select class="form-control col-2" id="proc_lrcl_cd" onchange="setCCC002()">
           <option value="" selected="selected">선택해주세요</option>
         </select>
@@ -75,7 +75,6 @@
         <select class="form-control col-2" id="proc_smcl_cd"></select>
         <input id="procId" class="form-control col-1" readonly style="font-weight: bold;">
         <input id="procName" class="form-control col-2" readonly style="font-weight: bold;">
-        <button type="button" class="btn btn-warning" style="margin-left: auto;">이전 프로세스:</button>
       </div>
       <div class="mainArea">
         <div class="contentArea col-4">

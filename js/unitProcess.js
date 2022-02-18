@@ -86,6 +86,8 @@ function createGrid() {
     gridView.setDisplayOptions({focusVisible:false}); // 포커스 표시 여부
     gridView.displayOptions.rowFocusType = "row"; // 그리드 한줄 선택
 
+    gridView.setColumnProperty("PROC_NM", "autoFilter", true);
+
     // ReadOnly
 	// 그리드 컬럼들의 editable 상태를 편히 관리하기 위해 컬럼 마다 관리
 	columns.forEach((element) => {
@@ -140,41 +142,47 @@ function createGrid() {
 }
 
 function setProPopUpMenu() {
-  	let menu = [
-	    {
-	        label: "프로세스 관리",
-			tag: "proc",
-	        enabled: false,
-	        children: []
-	    },
-	    {
-	        label: "스텝 관리",
-			tag: "step",
-	        enabled: true,
-	        children: []
-	    },
-	    {
-	        label: "menu2 입니다",
-	        enabled: false
-	    }
-  	];
-	gridView.addPopupMenu("menu1", menu);
-	
-  	gridView.onMenuItemClicked = function(grid, data, index) {
-		if(data.tag == 'step') {
-			const current = gridView.getCurrent();
-	  		const values = provider.getJsonRow(current.dataRow)
-	  		const PROC_LRCL_CD = values.PROC_LRCL_CD;
-			const PROC_MDCL_CD = values.PROC_MDCL_CD;
-			const PROC_SMCL_CD = values.PROC_SMCL_CD;
-			const PROC_ID = values.PROC_ID;
-			const PROC_NM = values.PROC_NM;
-	    	location.href = contextPath + "/StepManagement/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;	
-		} else if(data.tag == 'proc'){
-			openProcPop('update');
-		}
-  		
-  	};  
+    let menu = [
+      {
+          label: "프로세스 관리",
+          tag: "proc",
+          enabled: true,
+          children: []
+      },
+      {
+          label: "스텝 관리",
+          tag: "step",
+          enabled: true,
+          children: []
+      },
+      {
+          label: "스텝 조회",
+          tag: "step2",
+          enabled: true,
+          children: []
+      }
+    ];
+    gridView.addPopupMenu("menu1", menu);
+    gridView.onMenuItemClicked = function(grid, data, index) {
+        const current = gridView.getCurrent();
+        const values = provider.getJsonRow(current.dataRow)
+        const PROC_LRCL_CD = values.PROC_LRCL_CD;
+        const PROC_MDCL_CD = values.PROC_MDCL_CD;
+        const PROC_SMCL_CD = values.PROC_SMCL_CD;
+        const PROC_ID = values.PROC_ID;
+        const PROC_NM = values.PROC_NM;
+
+        if(data.tag == 'proc') {
+            //openProcPop('update');
+            location.href = contextPath + "/ProcessManagement-temp/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+            
+        }else if(data.tag == 'step') {
+            location.href = contextPath + "/StepManagement/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+                
+        }else if(data.tag == 'step2') {
+            location.href = contextPath + "/unitp-StepView/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+        }
+    };  
 }
 
 // Image탭에 저장된 이미지 View
@@ -443,7 +451,6 @@ function getCodeList(url,value){
 
 // 대분류 가져오기
 function setCCC001() {
-    console.log('setCCC001');
 	const list = getCodeList(contextPath + '/comcd/ccc001','');
 	let txt = '';
 	list.forEach(item =>{
@@ -667,39 +674,16 @@ function selectProcessStepList() {
         return ret;
     });
 	
-  	treeViewStep.onCellDblClicked = function (grid, clickData) {
+    treeViewStep.onCellDblClicked = function (grid, clickData) {
 	    const current = treeViewStep.getCurrent();
 		const dataRow = current.dataRow;
-	    const values = treeProviderStep.getJsonRow(current.dataRow)
+	    const values = treeProviderStep.getJsonRow(current.dataRow);
+		const procName = document.getElementById('procName').value;
 		
+		/*
 		if(clickData.column == "LNKN_PROC_ID") {
 			const LNKN_PROC_ID = values.LNKN_PROC_ID;
-			console.log(LNKN_PROC_ID);
-			
 			let value = LNKN_PROC_ID.substr(0, 2);
-			$("#proc_lrcl_cd").val(value).prop("selected", true);
-			setCCC002();
-            
-            let fields = provider.getOrgFieldNames();
-            let startFieldIndex = fields.indexOf(gridView.getCurrent().fieldName) + 1;
-            let options = {
-                fields : fields,
-                value : LNKN_PROC_ID,
-                startIndex : gridView.getCurrent().itemIndex,
-                startFieldIndex : startFieldIndex,
-                wrap : true,
-                caseSensitive : false,
-                partialMatch : true
-            };
-            let index = gridView.searchCell(options);
-            gridView.setCurrent(index);
-            gridView.onCellClicked();
-            
-            $("#proc_lrcl_cd").val(value).prop("selected", true);
-            $("#proc_mdcl_cd").val('all').prop("selected", true);
-            $("#proc_smcl_cd").val('all').prop("selected", true);
-			
-			/*
 	  		axios.get(contextPath + '/Process/findProcList',{
 		      params: {
 		                PROC_LRCL_CD : value,
@@ -727,16 +711,22 @@ function selectProcessStepList() {
 		            	gridView.setCurrent(index);
 						gridView.onCellClicked();
 						
+						let seletArea = document.getElementById("seletArea");
+						let beforeProcId = document.createElement('button');
+	    				beforeProcId.id = "beforeProcId";
+						beforeProcId.className = "btn btn-warning";
+						beforeProcId.innerText = procName;
+						seletArea.appendChild(beforeProcId);
+						
 						$("#proc_lrcl_cd").val(value).prop("selected", true);
-						$("#proc_mdcl_cd").val('all').prop("selected", true);
-						$("#proc_smcl_cd").val('all').prop("selected", true);
+						setCCC002();
 		      	}
 		    })
 		    .catch(function(error) {
 		        console.log(error);
 		    });
-			*/
 		}
+		*/
   	}
 }
 
