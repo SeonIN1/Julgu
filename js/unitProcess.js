@@ -1,8 +1,106 @@
+const { Editor } = toastui;
+const { colorSyntax } = Editor.plugin;
+
 document.addEventListener('DOMContentLoaded', async function () {
     createGrid();
     selectProcessStepList();
     setCCC001();
 });
+
+//분류 콤보 가져오기
+function getCodeList(url,value){
+	let result = [];
+	$.ajax({
+		url : url,
+		method : "GET",
+	    dataType: "json",
+	    data : {
+	    	comn_item_chrc_vl : value
+	    },
+	    async: false,
+	}).done((data)=>{
+		result = data;
+	}).fail((error)=>{
+		console.log(error)
+	})
+	return result;
+};
+
+// 대분류 가져오기
+function setCCC001() {
+	const list = getCodeList(contextPath + '/comcd/ccc001','');
+	let txt = '';
+	list.forEach(item =>{
+		txt += "<option class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
+ 	 })
+	$('#proc_lrcl_cd').append(txt);
+	$('#modal_procLrclCd').append(txt); // 프로세스 관리 모달에 대분류 세팅
+}
+
+// 중분류 가져오기
+function setCCC002() {
+	const value = $('#proc_lrcl_cd').val();
+	if(value == 'all'){
+		$('#proc_mdcl_cd').children('option').remove();
+		$('#proc_smcl_cd').children('option').remove();		
+	}else {
+		let txt = '';
+		const list = getCodeList(contextPath + '/comcd/ccc002', value);
+		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "전체" + "</option>"
+		list.forEach(item =>{
+			txt += "<option class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
+  		});
+		$('#proc_mdcl_cd').html(txt);
+		$('#proc_smcl_cd').children('option').remove();	
+	}
+	findProcList();
+}
+// 소분류 가져오기
+function setCCC003(){
+	const value = $('#proc_mdcl_cd').val();
+	if(value == 'all'){
+		$('#proc_smcl_cd').children('option').remove();
+	}else {
+		let txt = '';
+		const list = getCodeList(contextPath + '/comcd/ccc003', value);
+		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "전체" + "</option>"
+		list.forEach(item =>{
+			txt += "<option id='smcl' class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
+  		})
+		$('#proc_smcl_cd').html(txt);	
+	}
+	findProcList();
+}
+
+// 소분류 선택 시 재조회
+document.getElementById("proc_smcl_cd").addEventListener("change", function() {
+    findProcList();
+});
+// 분류 콤보값에 따른 조회
+function findProcList() {
+  	const lrcl = $('#proc_lrcl_cd').val();
+  	const mdcl = $('#proc_mdcl_cd').val();
+  	const smcl = $('#proc_smcl_cd').val();	
+  
+  	axios.get(contextPath + '/Process/findProcList',{
+      	params: {
+                	PROC_LRCL_CD : lrcl,
+                	PROC_MDCL_CD : mdcl,
+                	PROC_SMCL_CD : smcl,
+      	}
+    })
+    .then(function(response) {
+      const data = response.data;
+      provider.setRows(data);
+      if(data.length != 0) {
+          gridView.setFocus();
+          gridView.onCellClicked();		
+      }
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
 
 let container, provider, gridView;
 
@@ -86,7 +184,7 @@ function createGrid() {
     gridView.setDisplayOptions({focusVisible:false}); // 포커스 표시 여부
     gridView.displayOptions.rowFocusType = "row"; // 그리드 한줄 선택
 
-    gridView.setColumnProperty("PROC_NM", "autoFilter", true);
+	gridView.setColumnProperty("PROC_NM", "autoFilter", true);
 
     // ReadOnly
 	// 그리드 컬럼들의 editable 상태를 편히 관리하기 위해 컬럼 마다 관리
@@ -112,8 +210,48 @@ function createGrid() {
     gridView.columnByName("LAST_UPDR_ID").visible =  colVisible; // 최종수정자ID
     gridView.columnByName("LAST_UPDT_IP").visible =  colVisible; // 최종수정IP
     gridView.columnByName("LAST_UPDT_DT").visible =  colVisible; // LAST_UPDT_DT
-
-	setProPopUpMenu();
+	
+	/* 프로세스 그리드 팝업 메뉴 생성 */	
+	let menu = [
+	    {
+	        label: "프로세스 관리",
+			tag: "proc",
+	        enabled: true,
+	        children: []
+	    },
+	    {
+	        label: "스텝 관리",
+			tag: "step",
+	        enabled: true,
+	        children: []
+	    },
+	    {
+	        label: "스텝 조회",
+			tag: "step2",
+	        enabled: true,
+	        children: []
+	    }
+  	];
+	gridView.addPopupMenu("menu1", menu);
+  	gridView.onMenuItemClicked = function(grid, data, index) {
+			const current = gridView.getCurrent();
+	  		const values = provider.getJsonRow(current.dataRow)
+	  		const PROC_LRCL_CD = values.PROC_LRCL_CD;
+			const PROC_MDCL_CD = values.PROC_MDCL_CD;
+			const PROC_SMCL_CD = values.PROC_SMCL_CD;
+			const PROC_ID = values.PROC_ID;
+			const PROC_NM = values.PROC_NM;
+	
+		if(data.tag == 'proc') {
+			$("#propsMaModal").modal('show'); // $('#propsMaModal').on('show.bs.modal', function (e)
+			//openProcPop('update');
+			//location.href = contextPath + "/ProcessManagement-temp/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+		}else if(data.tag == 'step') {
+	    	location.href = contextPath + "/StepManagement/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+		}else if(data.tag == 'step2') {
+			location.href = contextPath + "/unitp-StepView/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
+		}
+  	};
 
     // ProcGrid 클릭 이벤트
     gridView.onCellClicked = function (grid, clickData) {
@@ -139,50 +277,6 @@ function createGrid() {
         return false;
    };
    */
-}
-
-function setProPopUpMenu() {
-    let menu = [
-      {
-          label: "프로세스 관리",
-          tag: "proc",
-          enabled: true,
-          children: []
-      },
-      {
-          label: "스텝 관리",
-          tag: "step",
-          enabled: true,
-          children: []
-      },
-      {
-          label: "스텝 조회",
-          tag: "step2",
-          enabled: true,
-          children: []
-      }
-    ];
-    gridView.addPopupMenu("menu1", menu);
-    gridView.onMenuItemClicked = function(grid, data, index) {
-        const current = gridView.getCurrent();
-        const values = provider.getJsonRow(current.dataRow)
-        const PROC_LRCL_CD = values.PROC_LRCL_CD;
-        const PROC_MDCL_CD = values.PROC_MDCL_CD;
-        const PROC_SMCL_CD = values.PROC_SMCL_CD;
-        const PROC_ID = values.PROC_ID;
-        const PROC_NM = values.PROC_NM;
-
-        if(data.tag == 'proc') {
-            //openProcPop('update');
-            location.href = contextPath + "/ProcessManagement-temp/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
-            
-        }else if(data.tag == 'step') {
-            location.href = contextPath + "/StepManagement/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
-                
-        }else if(data.tag == 'step2') {
-            location.href = contextPath + "/unitp-StepView/?PROC_LRCL_CD="+PROC_LRCL_CD+"&PROC_MDCL_CD="+PROC_MDCL_CD+"&PROC_SMCL_CD="+PROC_SMCL_CD+"&PROC_ID="+PROC_ID+"&PROC_NM="+PROC_NM;
-        }
-    };  
 }
 
 // Image탭에 저장된 이미지 View
@@ -392,8 +486,6 @@ function saveFile() {
   
 }
 
-
-
 // 이미지, 첨부파일 리스트에서 파일 X 버튼 클릭 시
 $(document).on("click","#deleteProcFile",function(e) {
     if(confirm('삭제 하시겠습니까?')) {
@@ -429,101 +521,6 @@ $(document).on("click","#deleteProcFile",function(e) {
         }
     }
 });
-
-//분류 콤보 가져오기
-function getCodeList(url,value){
-	let result = [];
-	$.ajax({
-		url : url,
-		method : "GET",
-	    dataType: "json",
-	    data : {
-	    	comn_item_chrc_vl : value
-	    },
-	    async: false,
-	}).done((data)=>{
-		result = data;
-	}).fail((error)=>{
-		console.log(error)
-	})
-	return result;
-};
-
-// 대분류 가져오기
-function setCCC001() {
-	const list = getCodeList(contextPath + '/comcd/ccc001','');
-	let txt = '';
-	list.forEach(item =>{
-		txt += "<option class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
- 	 })
-	$('#proc_lrcl_cd').append(txt);
-}
-
-// 중분류 가져오기
-function setCCC002() {
-	const value = $('#proc_lrcl_cd').val();
-	if(value == 'all'){
-		$('#proc_mdcl_cd').children('option').remove();
-		$('#proc_smcl_cd').children('option').remove();		
-	}else {
-		let txt = '';
-		const list = getCodeList(contextPath + '/comcd/ccc002', value);
-		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "전체" + "</option>"
-		list.forEach(item =>{
-			txt += "<option class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
-  		});
-		$('#proc_mdcl_cd').html(txt);
-		$('#proc_smcl_cd').children('option').remove();	
-	}
-	findProcList();
-}
-// 소분류 가져오기
-function setCCC003(){
-	const value = $('#proc_mdcl_cd').val();
-	if(value == 'all'){
-		$('#proc_smcl_cd').children('option').remove();
-	}else {
-		let txt = '';
-		const list = getCodeList(contextPath + '/comcd/ccc003', value);
-		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "전체" + "</option>"
-		list.forEach(item =>{
-			txt += "<option id='smcl' class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
-  		})
-		$('#proc_smcl_cd').html(txt);	
-	}
-	findProcList();
-}
-
-// 소분류 선택 시 재조회
-document.getElementById("proc_smcl_cd").addEventListener("change", function() {
-    findProcList();
-});
-// 분류 콤보값에 따른 조회
-function findProcList() {
-  const lrcl = $('#proc_lrcl_cd').val();
-  const mdcl = $('#proc_mdcl_cd').val();
-  const smcl = $('#proc_smcl_cd').val();
-  
-  axios.get(contextPath + '/Process/findProcList',{
-      params: {
-                PROC_LRCL_CD : lrcl,
-                PROC_MDCL_CD : mdcl,
-                PROC_SMCL_CD : smcl,
-      }
-    })
-    .then(function(response) {
-      const data = response.data;
-      provider.setRows(data);
-      if(data.length != 0) {
-          gridView.setFocus();
-          gridView.onCellClicked();		
-      }
-    })
-    .catch(function(error) {
-        console.log(error);
-    });
-}
-
 
 /*********************************************************************************************************************/
 // Step Grid
@@ -674,7 +671,7 @@ function selectProcessStepList() {
         return ret;
     });
 	
-    treeViewStep.onCellDblClicked = function (grid, clickData) {
+  	treeViewStep.onCellDblClicked = function (grid, clickData) {
 	    const current = treeViewStep.getCurrent();
 		const dataRow = current.dataRow;
 	    const values = treeProviderStep.getJsonRow(current.dataRow);
@@ -728,6 +725,10 @@ function selectProcessStepList() {
 		}
 		*/
   	}
+
+
+
+
 }
 
 function selectStepList() {
@@ -749,3 +750,130 @@ function selectStepList() {
     	console.log(error);
   	});
 }
+
+
+
+
+/* *********************************************************************************************** */
+/* 팝업 메뉴에서 프로세스 관리 선택 시 모달이 보여질 때 */
+let procCtnEditor;
+$('#propsMaModal').on('show.bs.modal', function (e) {
+	const current = gridView.getCurrent();
+	const values = provider.getJsonRow(current.dataRow)
+	const PROC_LRCL_CD = values.PROC_LRCL_CD;
+	const PROC_MDCL_CD = values.PROC_MDCL_CD;
+	const PROC_SMCL_CD = values.PROC_SMCL_CD;
+	
+	$("#modal_procLrclCd").val(PROC_LRCL_CD).prop("selected", true);
+	setCCC002_modal();
+	$("#modal_procMdclCd").val(PROC_MDCL_CD).prop("selected", true);
+	setCCC003_modal();
+	$("#modal_procSmclCd").val(PROC_SMCL_CD).prop("selected", true);
+	
+	procCtnEditor = new toastui.Editor({
+		el: document.querySelector('#process_ctn'),
+		height: '400px',
+		initialEditType : 'wysiwyg',
+		hideModeSwitch : true,
+		plugins: [colorSyntax],
+	});
+	procCtnEditor.removeToolbarItem('image');
+	
+	document.getElementById('process_id').value = values.PROC_ID; 
+	document.getElementById('process_name').value = values.PROC_NM;
+	procCtnEditor.setHTML(values.PROC_CTN);	
+});
+
+function setCCC002_modal() {
+	const value = $('#modal_procLrclCd').val();
+	if(value == 'all'){
+		$('#modal_procMdclCd').children('option').remove();
+		$('#modal_procSmclCd').children('option').remove();		
+	}else {
+		let txt = '';
+		const list = getCodeList(contextPath + '/comcd/ccc002', value);
+		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "선택해주세요" + "</option>"
+		list.forEach(item =>{
+			txt += "<option class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
+  		});
+		$('#modal_procMdclCd').html(txt);
+		$('#modal_procSmclCd').children('option').remove();	
+	}
+}
+
+function setCCC003_modal() {
+	const value = $('#modal_procMdclCd').val();
+	if(value == 'all'){
+		$('#modal_procSmclCd').children('option').remove();
+	}else {
+		let txt = '';
+		const list = getCodeList(contextPath + '/comcd/ccc003', value);
+		txt += "<option class='dropdown-item' value='" + "all" + "'>" + "선택해주세요" + "</option>"
+		list.forEach(item =>{
+			txt += "<option id='smcl' class='dropdown-item' value='" + item.COMN_DTLS_CD + "'>" + item.DETL_CD_NM + "</option>"
+  		})
+		$('#modal_procSmclCd').html(txt);	
+	}
+}
+
+function updateProcInfo() {
+    const PROC_LRCL_CD = $('#modal_procLrclCd').val();
+    const PROC_MDCL_CD = $('#modal_procMdclCd').val();
+    const PROC_SMCL_CD = $('#modal_procSmclCd').val();
+    const PROC_ID = $('#process_id').val();
+    const PROC_NM = $('#process_name').val();
+    const PROC_CTN = procCtnEditor.getHTML();
+    const PROC_DVCN_CD = '01';
+    const USE_YN = 'on';
+    const CSUT_GRP_CD = 'A';
+    
+    axios.post(contextPath + '/updateProcessList', null, { 
+        params: {
+            PROC_LRCL_CD,
+            PROC_MDCL_CD,
+            PROC_SMCL_CD,
+            PROC_ID,
+            PROC_NM,
+            PROC_CTN,
+            PROC_DVCN_CD,
+            USE_YN,
+            CSUT_GRP_CD
+        }
+    })
+    .then(function (response) {
+        console.log(response.data + "," + response.status);
+        if(response.data == 1) { // 업데이트 성공
+            $("#propsMaModal").modal('hide');
+            const current = gridView.getCurrent();
+            const dataRow = current.dataRow;
+        
+            const lrcl = $('#proc_lrcl_cd').val();
+            const mdcl = $('#proc_mdcl_cd').val();
+            const smcl = $('#proc_smcl_cd').val();	
+            axios.get(contextPath + '/Process/findProcList',{
+                params: {
+                          PROC_LRCL_CD : lrcl,
+                          PROC_MDCL_CD : mdcl,
+                          PROC_SMCL_CD : smcl,
+                }
+            })
+            .then(function(response) {
+                const data = response.data;
+                provider.setRows(data);
+                if(data.length != 0) {
+                    // gridView.setFocus();
+                    // gridView.onCellClicked();	
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+        }
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
+
+$('#propsMaModal').on('hide.bs.modal', function (e) {
+});
