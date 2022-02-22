@@ -71,7 +71,7 @@
       </form> -->
     </div>
   </nav>
-  <main role="main" class="container"> <!-- blanchedalmond, bisque -->
+  <main role="main" class="container-fluid"> <!-- blanchedalmond, bisque -->
     <div class="starter-template">
         <h3>통합프로세스-ToDoList</h3>
         <div class="optionArea row">
@@ -99,12 +99,23 @@
             <div class="toDoListGridArea">
               <div id="toDoListGrid" class="toDoListGrid"></div>
             </div>
-            <div class="toDoAskArea">
-              <div class="toDoAskCtn col-9">
-                
+          </div>
+          <div class="toDoAskArea col-3">
+            <div class="toDoAskCtn">
+              <div class="card border-dark mb-3">
+                <div class="card-header">의뢰내용</div>
+                <div class="card-body text-dark">
+                  <div id="toDoAskEditor"></div>
+                </div>
               </div>
-              <div class="toDoAnswerList">
-
+            </div>
+            <div id="answerGrid" class="answerGrid" style="width: 100%; height: 15%;"></div>
+            <div class="toDoAnswerList">
+              <div class="card border-success mb-3">
+                <div class="card-header">답변내용</div>
+                <div class="card-body">
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -114,11 +125,12 @@
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="./js/UnifiedProcess-TodoList.js"></script>
 
   <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+
+  <script src="./js/UnifiedProcess-TodoList.js"></script>
   <script>
     const realGrid2Lic = "upVcPE+wPOmtLjqyBIh9RkM/nBOseBrflwxYpzGZyYmf0p0NzaD/UGp5TZmtDv/s/NIW4NiE7ye99/vc60f9i/zSFuDYhO8n5FWoeNFAGterVC5AjTeyHVvbelftwmJ2pzTSJoFVyNeLmrqK4xhR4kYeXTIC2fYTRZ8IdzC3lzGGfnABQhKm+Rqu6PpPvPE3Zue8h1ZHbPM=";
     // const contextPath = "http://localhost:18087/KOOK/";

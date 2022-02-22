@@ -15,3 +15,69 @@
 
 color 
 burlywood
+
+
+@GetMapping("/Integration/SelectItgToDoList")
+@ResponseBody
+public List<Map<String, Object>> SelectItgToDoList(CommandMap cmap) throws Exception {
+    
+    log.debug("## /Integration/SelectItgToDoList");
+    log.debug(String.valueOf(cmap.getMap()));
+    
+    cmap.put("SVR", "Select_ItgToDoList");
+    List<Map<String, Object>> list = CommonService.sql_selectList(cmap.getMap());
+    
+    return list;
+}
+
+<select id="Select_ItgToDoList" parameterType="hashmap" resultType="hashmap">
+    SELECT 
+            PROC_ID,
+            PROC_NM,
+            STEP_ID,
+            STEP_NM,
+            COMPL_ST,
+            WR_UNIT,
+            TODO_ASK,
+            TODO_ASNM,
+            FRST_RGSR_ID,
+            FRST_RGST_IP,
+            FRST_RGST_DT,
+            LAST_UPDR_ID,
+            LAST_UPDT_IP,
+            LAST_UPDT_DT
+        FROM ITGTODOLISTT
+    ORDER BY PROC_ID 
+    ;
+</select>
+
+CREATE TABLE `ITGTODOLISTT` (
+  `PROC_ID` varchar(50) NOT NULL COMMENT '프로세스ID',
+  `PROC_NM` varchar(300) DEFAULT NULL COMMENT '단계명',
+  `STEP_ID` int(11) NOT NULL COMMENT '단계ID',
+  `STEP_NM` varchar(300) DEFAULT NULL COMMENT '단계명',
+  `COMPL_ST` char(1) DEFAULT NULL COMMENT '완료여부',
+  `WR_UNIT` varchar(20) DEFAULT NULL COMMENT '업무구분',
+  `TODO_ASK` varchar(1000) DEFAULT NULL COMMENT '의뢰내용',
+  `TODO_ASNM` varchar(100) DEFAULT NULL COMMENT '수행인원',
+  `FRST_RGSR_ID` varchar(10) DEFAULT NULL COMMENT '최초등록자ID',
+  `FRST_RGST_IP` varchar(39) DEFAULT NULL COMMENT '최초등록IP',
+  `FRST_RGST_DT` datetime DEFAULT current_timestamp() COMMENT '최초등록일시',
+  `LAST_UPDR_ID` varchar(10) DEFAULT NULL COMMENT '최종수정자ID',
+  `LAST_UPDT_IP` varchar(39) DEFAULT NULL COMMENT '최종수정IP',
+  `LAST_UPDT_DT` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '최종수정일시',
+  PRIMARY KEY (`PROC_ID`,`STEP_ID`,`FRST_RGST_DT`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='스텝관리'
+
+INSERT INTO ITGTODOLISTT 
+	   (PROC_ID, PROC_NM, STEP_ID, STEP_NM, COMPL_ST, WR_UNIT, TODO_ASK, TODO_ASNM) 
+VALUES (
+		'KKK000T2',
+		(SELECT PROC_NM FROM COMPROCMMT WHERE PROC_ID = 'KKK000T2'),
+		'1',
+		'테스트스텝', 
+		'N', 
+		'진료', 
+		'상세설명오쳥합니다상세설명오쳥합니다상세설명오쳥합니다상세설명오쳥합니다상세설명오쳥합니다상세설명오쳥합니다', 
+		'김휴니'
+		);

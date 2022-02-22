@@ -3,8 +3,8 @@ body {
 }
 
 .starter-template {
-    padding-left: 10rem;
-    padding-right: 10rem;
+    /* padding-left: 10rem; */
+    /* padding-right: 10rem; */
 }
 
 .optionArea {
@@ -13,7 +13,7 @@ body {
 
 .contentArea {
     display: flex;
-    border: 1px solid blanchedalmond;
+    /* border: 1px solid blanchedalmond; */
     height: 800px;
 }
 
@@ -35,20 +35,47 @@ body {
 }
 
 .contentArea .toDoListArea .toDoListGridArea {
-    height: 60%;
+    height: 100%;
 }
 
 .contentArea .toDoListArea .toDoListGridArea .toDoListGrid {
     height: 100%;
 }
 
-.contentArea .toDoListArea .toDoAskArea {
-    height: 40%;
+.contentArea .toDoAskArea {
+    padding: 0;
+    height: 100%;
 }
 
-.contentArea .toDoListArea .toDoAskArea .toDoAskCtn {
+.contentArea .toDoAskArea .card {
+    padding: 0;
     height: 100%;
-    border: 1px solid gray;
+}
+
+.contentArea .toDoAskArea .card-header {
+    font-weight: bold;
+}
+
+.contentArea .toDoAskArea .card-body {
+    padding-top: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.contentArea .toDoAskArea .toDoAskCtn {
+    height: 40%;
+    padding-bottom: 1px;
+}
+
+.contentArea .toDoAskArea .answerGrid {
+    height: 15%;
+    padding-bottom: 1px;
+}
+
+.contentArea .toDoAskArea .toDoAnswerList {
+    height: 45%;
+    padding-top: 1px;
 }
 
 
