@@ -170,13 +170,13 @@ let toDoFields = [
 ]
 
 let toDoColumns = [
+    {fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
 	{fieldName:"PROC_ID", name:"PROC_ID", header:{text:"프로세스ID"}},
 	{fieldName:"PROC_NM", name:"PROC_NM", header:{text:"프로세스명"}},
-    {fieldName:"STEP_ID", name:"STEP_ID", header:{text:"단계ID"}},
+    {fieldName:"STEP_NM", name:"STEP_NM", header:{text:"단계명"}},
     {fieldName:"TODO_ASK", name:"TODO_ASK", header:{text:"의뢰내용"}},
-    {fieldName:"TODO_ASNM", name:"TODO_ASNM", header:{text:"수행인원"}},
-    {fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
     {fieldName:"WR_UNIT", name:"WR_UNIT", header:{text:"업무구분"}},
+    {fieldName:"TODO_ASNM", name:"TODO_ASNM", header:{text:"수행인원"}},
     {fieldName:"COMPL_ST", name:"COMPL_ST", header:{text:"완료여부"}},
 
 	{fieldName:"FRST_RGSR_ID", name:"FRST_RGSR_ID", header:{text: "최초등록자ID"}},

@@ -14,7 +14,7 @@ body {
 .contentArea {
     display: flex;
     /* border: 1px solid blanchedalmond; */
-    height: 800px;
+    height: 770px;
 }
 
 .contentArea .UnifiedProcessListArea {
