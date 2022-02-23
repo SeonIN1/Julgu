@@ -172,7 +172,7 @@ let toDoFields = [
 let toDoColumns = [
 	{fieldName:"PROC_ID", name:"PROC_ID", header:{text:"프로세스ID"}},
 	{fieldName:"PROC_NM", name:"PROC_NM", header:{text:"프로세스명"}},
-    {fieldName:"STEP_ID", name:"PROC_ID", header:{text:"단계ID"}},
+    {fieldName:"STEP_ID", name:"STEP_ID", header:{text:"단계ID"}},
     {fieldName:"TODO_ASK", name:"TODO_ASK", header:{text:"의뢰내용"}},
     {fieldName:"TODO_ASNM", name:"TODO_ASNM", header:{text:"수행인원"}},
     {fieldName:"FRST_RGST_DT", name:"FRST_RGST_DT", header:{text: "최초등록일시"}},
@@ -206,14 +206,19 @@ function createTodoListGrid() {
     toDoGridView.setCheckBar({visible: false}); // 그리드 체크 박스 표시
     toDoGridView.setRowIndicator({visible: false}); // 그리드 행수 표시
     toDoGridView.setStateBar({visible: false}); // 그리드에서 입력,수정,삭제 표시
-    toDoGridView.setDisplayOptions({focusVisible:false}); // 포커스 표시 여부
-    toDoGridView.displayOptions.rowFocusType = "row"; // 그리드 한줄 선택
+    // toDoGridView.setDisplayOptions({focusVisible:false}); // 포커스 표시 여부
+    // toDoGridView.displayOptions.rowFocusType = "row"; // 그리드 한줄 선택
 
     // ReadOnly
 	// 그리드 컬럼들의 editable 상태를 편히 관리하기 위해 컬럼 마다 관리
 	toDoColumns.forEach((element) => {
 		toDoGridView.columnByName(element.name).editable = false;
 	});
+
+    toDoColumns.forEach((element) => {
+		toDoGridView.setColumnProperty(element, "mergeRule", { criteria: "value" });
+	});
+    toDoGridView.displayOptions.showInnerFocus = false;
 
     toDoGridView.displayOptions.fitStyle = "evenFill"; // 그리드 꽉 채우기
     // 컬럼 표시 여부
@@ -271,12 +276,14 @@ let ansContainer, ansProvider, ansGridView;
 let ansFields = [
     {fieldName:"ANS_NM", dataType:"text"},      // 프로세스 ID
     {fieldName:"CNFM_DT", dataType:"date"},      // 프로세스 명
+    {fieldName:"XXXXX", dataType:"text"},      // 프로세스 명
     {fieldName:"CNFM_ST", dataType:"text"},      // No
 ]
 
 let ansColumns = [
 	{fieldName:"ANS_NM", name:"ANS_NM", header:{text:"확인자"}},
 	{fieldName:"CNFM_DT", name:"CNFM_DT", header:{text:"확인날짜"}},
+    {fieldName:"XXXXX", name:"XXXXX", header:{text:"보완프로세스"}},
     {fieldName:"CNFM_ST", name:"CNFM_ST", header:{text:"완료여부"}},
 ];
 
@@ -307,5 +314,6 @@ function createAnsGrid() {
 	ansColumns.forEach((element) => {
 		ansGridView.columnByName(element.name).editable = false;
 	});
+
 }
 
