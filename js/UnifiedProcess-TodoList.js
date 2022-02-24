@@ -215,19 +215,22 @@ function createTodoListGrid() {
 		toDoGridView.columnByName(element.name).editable = false;
 	});
 
+    // 같은 값의 그리드 병합
     toDoColumns.forEach((element) => {
 		toDoGridView.setColumnProperty(element, "mergeRule", { criteria: "value" });
 	});
     toDoGridView.displayOptions.showInnerFocus = false;
 
     toDoGridView.displayOptions.fitStyle = "evenFill"; // 그리드 꽉 채우기
+
     // 컬럼 표시 여부
-    const colVisible = false;
-    toDoGridView.columnByName("FRST_RGSR_ID").visible =  colVisible; 
-    toDoGridView.columnByName("FRST_RGST_IP").visible =  colVisible; 
-    toDoGridView.columnByName("LAST_UPDR_ID").visible =  colVisible; 
-    toDoGridView.columnByName("LAST_UPDT_IP").visible =  colVisible; 
-    toDoGridView.columnByName("LAST_UPDT_DT").visible =  colVisible;
+    // const colVisible = false;
+    // toDoGridView.columnByName("PROC_ID").visible =  false;
+    toDoGridView.columnByName("FRST_RGSR_ID").visible =  false; 
+    toDoGridView.columnByName("FRST_RGST_IP").visible =  false; 
+    toDoGridView.columnByName("LAST_UPDR_ID").visible =  false; 
+    toDoGridView.columnByName("LAST_UPDT_IP").visible =  false; 
+    toDoGridView.columnByName("LAST_UPDT_DT").visible =  false;
 
     toDoGridView.setColumnProperty("PROC_ID","width",80);
     toDoGridView.setColumnProperty("PROC_NM","width",150);
