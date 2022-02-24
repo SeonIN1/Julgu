@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base</title>
+    <!-- Favicon-->
+    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../css/xOrigin/styles.css" rel="stylesheet">
+    <!-- Real Grid -->
+    <link href="./realgrid/realgrid-style.css" rel="stylesheet">
+    <script src="./realgrid/realgrid.2.3.3.min.js"></script>
+    <script src="./realgrid/libs/jszip.min.js"></script>
+    <!-- Page CSS -->
+    <link href="../css/xOrigin/global.css" rel="stylesheet">
+    <link href="../css/xOrigin/newUnitProcess.css" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        <jsp:include page="../common/sidebar.jsp"></jsp:include>
+        <!-- Page Content-->
+        <div id="page-content-wrapper">
+            <jsp:include page="../common/navbar.jsp"></jsp:include>
+            <div class="container-fluid">
+                <h3 class="mt-2">테스트페이지</h3>
+                <hr>
+                <div class="content" style="background-color: black;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Core theme JS-->
+    <script>
+		const contextPath = "${pageContext.request.contextPath}";
+		const realGrid2Lic = '<%=(String)session.getAttribute("GRIDLIC")%>';
+    </script>
+    <script src="${pageContext.request.contextPath}/resources/js/management/common/common.js"></script>
+</body>
+</html>
