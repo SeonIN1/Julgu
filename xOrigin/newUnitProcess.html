@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Knowledge Base</title>
     <!-- Favicon-->
     <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
@@ -11,38 +11,172 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../css/xOrigin/styles.css" rel="stylesheet">
     <!-- Real Grid -->
-    <link href="./realgrid/realgrid-style.css" rel="stylesheet">
-    <script src="./realgrid/realgrid.2.3.3.min.js"></script>
-    <script src="./realgrid/libs/jszip.min.js"></script>
+    <link href="../realgrid/realgrid-style.css" rel="stylesheet">
+    <script src="../realgrid/realgrid.2.5.0.min.js"></script>
+    <script src="../realgrid/libs/jszip.min.js"></script>
     <!-- Page CSS -->
-    <link href="../css/xOrigin/global.css" rel="stylesheet">
+    <link href="../css/xOrigin/common.css" rel="stylesheet">
     <link href="../css/xOrigin/newUnitProcess.css" rel="stylesheet">
 </head>
+<style>
+    .navbar .btn.btn-primary {
+        margin-right: 10px;
+        color: black;
+    /* 	background-color: #4e73df; */
+        background-color: #f8f9fa;
+        border: none;
+    }
+</style>
 <body>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
-        <jsp:include page="../common/sidebar.jsp"></jsp:include>
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading"><a href="#">KOOK</a></div>
+                <div class="list-group list-group-flush">
+                    <!-- <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/Step">과거 작업페이지</a> -->
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/AllSearch">전체 검색</a>
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/IntegrationTest">통합프로세스(관리)</a>
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/TotalProcessList">통합프로세스-Step(관리)</a>
+                    <!-- <a class="list-group-item list-group-item-action bg-light text-danger" href="${contextPath}/ProcessManagement">단위프로세스</a> -->
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/ProcessManagement-temp">단위프로세스(관리)</a>
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/StepManagement">단위프로세스-Step(관리)</a>
+                    <!-- <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/KeywordManagement">키워드관리</a> -->
+                    <a class="list-group-item list-group-item-action bg-light" href="${contextPath}/viewComCd">공통코드</a>
+                </div>
+        </div>
         <!-- Page Content-->
         <div id="page-content-wrapper">
-            <jsp:include page="../common/navbar.jsp"></jsp:include>
-            <div class="container-fluid">
-                <h3 class="mt-2">테스트페이지</h3>
-                <hr>
-                <div class="content" style="background-color: black;">
+            <!-- NavBae -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <a class="btn btn-primary text-danger" href="${contextPath}/ProcessManagement">단위프로세스(조회)</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item dropdown active">
+                            <a class="nav-link dropdown-toggle" id="userInfoDropdown" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userInfoDropdown">
+                                <a class="dropdown-item" id="userInfoID" href="#!"></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="${contextPath}/logout">Logout</a>
+                                <!-- <a class="dropdown-item" href="#!">Another action</a> -->
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
+            </nav>
+            <div class="container-fluid">
+                <h5 class="mt-2 font-weight-bold">단위프로세스</h5>
+                <!-- <hr style="margin-top: 0.2rem; margin-bottom: 0.2rem;"> -->
+                <div class="content">
+                    <div class="selectArea">
+                        <select class="custom-select col-2" id ="proc_lrcl_cd" name="proc_lrcl_cd" onchange="setCCC002()">
+                            <option value="" selected="selected">선택해주세요</option>
+                            <!-- <option value="all" selected="selected">전체</option> value="all"  시 전체 리스트 조회 -->
+                        </select>
+                        <select class="custom-select col-2" id ="proc_mdcl_cd" name="proc_mdcl_cd" onchange="setCCC003()">
+                        </select>
+                        <select class="custom-select col-2" id ="proc_smcl_cd" name="proc_smcl_cd">
+                        </select>
+                        <button class="btn btn-primary" onclick="findProcList()">조회</button>
+                        <button id="gridRefresh" class="btn btn-primary gridRefreshBtn">검색</button>				    
+                    </div>
+                    <hr style="margin-top: 0.2rem; margin-bottom: 0.2rem;">
+                    <div style="display: flex; height: 100%; margin-bottom: 3px;">
+                        <div class="unitProcessArea col-3">
+                            <div class="card procGridArea">
+                                <div class="card-body" style="padding: 0;">
+                                    <div id="unitProceeGird" class="unitProceeGird"></div>
+                                </div>
+                            </div>
+                            <div class="card fileListArea">
+                                <div class="card-header tabMenu">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <a class="nav-link active" id="nav-fileList-tab" data-toggle="tab" href="#nav-fileList" role="tab" aria-controls="nav-fileList" aria-selected="true">파일관리</a>
+                                            <a class="nav-link" id="nav-procCtn-tab" data-toggle="tab" href="#nav-procCtn" role="tab" aria-controls="nav-procCtn" aria-selected="false">프로세스 내용</a>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <div class="card-body tabBody">
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-fileList" role="tabpanel" aria-labelledby="nav-fileList-tab">
+                                            <div class="card" style="border: none; height: 50%;">
+                                                <div style="font-weight: 600; margin-bottom: 1px; padding-left: 3px;">이미지</div>
+                                                <div class="card-body fileList">
+                                                <div class= "col imgListArea">
+                                                    <div class="custom-file">
+                                                    <input name="files" id="imageUpload" type="file" class="custom-file-input" multiple/>
+                                                        <label class="custom-file-label" for="fileupload" aria-describedby="fileList">Choose file</label>
+                                                    </div>
+                                                    <div id='my-form' class="list-group" style="height:130px; border:1px solid gray; overflow:scroll;">
+                                                    <div id="imageList" style="margin-left: 10px;"></div>
+                                                    </div>   
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="card" style="border: none; height: 50%;">
+                                                <div style="font-weight: 600; margin-bottom: 1px; padding-left: 3px;">첨부파일</div>
+                                                <div class="card-body fileList">
+                                                <div class= "col fileListArea">
+                                                    <div class="custom-file">
+                                                    <input name="files" id="fileupload" type="file" class="custom-file-input" multiple/>
+                                                        <label class="custom-file-label" for="fileupload" aria-describedby="fileList">Choose file</label>
+                                                    </div>
+                                                    <div id='my-form' class="list-group" style="height:130px; border:1px solid gray; overflow:scroll;">
+                                                    <div id="fileList" style="margin-left: 10px;"></div>
+                                                    </div>   
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="nav-procCtn" role="tabpanel" aria-labelledby="nav-procCtn-tab">
+                                            ...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- unitProcessArea -->
+                        <div class="detailArea col-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Home</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                </div>
+                              </div>
+                        </div>
+                    </div>                    
+                    <button id="gridRefresh" class="btn btn-primary gridRefreshBtn">단위프로세스 등록</button>
+                </div>
+            </div><!-- container-fluid -->
+        </div><!-- page-content-wrapper -->
     </div>
+    <div id="modalArea"></div>
     <!-- Bootstrap core JS-->
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- Core theme JS-->
+    <script src="../js/xOrigin/global.js"></script>
+    <script src="../js/xOrigin/newUniProcess.js"></script>
     <script>
-		const contextPath = "${pageContext.request.contextPath}";
-		const realGrid2Lic = '<%=(String)session.getAttribute("GRIDLIC")%>';
+        const realGrid2Lic = "upVcPE+wPOmtLjqyBIh9RkM/nBOseBrflwxYpzGZyYmf0p0NzaD/UGp5TZmtDv/s/NIW4NiE7ye99/vc60f9i/zSFuDYhO8n5FWoeNFAGterVC5AjTeyHVvbelftwmJ2pzTSJoFVyNeLmrqK4xhR4kYeXTIC2fYTRZ8IdzC3lzGGfnABQhKm+Rqu6PpPvPE3Zue8h1ZHbPM=";
+        // const contextPath = "http://localhost:18087/KOOK/";
+        const contextPath = "http://localhost:8080/KOOK/";
+        // const loginId = "<%=(String)session.getAttribute("login_user")%>";  //로그인 아이디
+        // const userName = "<%=(String)session.getAttribute("USER_NAME")%>";  //이름
+        const loginId = "HN999";    //로그인 아이디
+        const userName = "테스트";  //이름
+        document.getElementById('userInfoDropdown').innerText = userName;
+        document.getElementById('userInfoID').innerText = loginId;
     </script>
-    <script src="${pageContext.request.contextPath}/resources/js/management/common/common.js"></script>
 </body>
 </html>

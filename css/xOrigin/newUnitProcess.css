@@ -1,0 +1,88 @@
+#wrapper {
+    width: 1920px;
+    /* height: 100vh; */
+    /* height: 100%; */
+}
+
+#sidebar-wrapper {
+    position: fixed;
+}
+
+#page-content-wrapper {
+    /* margin-left: 241px; */
+    padding-left: 241px;
+}
+
+.content {
+    height: 760px;
+}
+
+.unitProcessArea {
+    padding-left: 0;
+    padding-right: 0;
+    height: 100%;
+    }
+    .unitProcessArea .procGridArea {
+        height: 45%;
+        /* margin-bottom: 2px; */
+        }
+        .procGridArea .unitProceeGird {
+            height: 100%;
+        }
+        .procGridArea .card-body .unitProceeGird .rg-grid {
+            border-color: #6c757d;
+        }
+    .unitProcessArea .fileListArea {
+        border-color: #6c757d;
+        height: 55%;
+        }
+        .fileListArea .tabMenu {
+            padding: 0;
+            border-bottom: none;
+        }
+        .fileListArea .tabBody {
+            padding: 0.3rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+            }
+            .fileListArea .tabBody .fileList {
+                padding: 0;
+            }
+            .fileListArea .tabBody .fileList .imgListArea {
+                padding: 0;
+            }
+            .fileListArea .tabBody .fileList .fileListArea {
+                padding: 0;
+            }
+
+.detailArea {
+    padding-left: 5px;
+    padding-right: 0;
+    }
+    .detailArea .card {
+        height: 100%;
+        border-color: #6c757d;
+    }
+    .detailArea .card-header {
+        padding: 0;
+        /* border-bottom: none; */
+    }
+
+
+/* QHD */
+@media (min-width: 1921px) {
+    #wrapper {
+        width: 2560px;
+        height: 100vh;
+    }
+    .content {
+        height: 1100px;
+    }
+    .unitProcessArea .procGridArea {
+        height: 60%;
+    }
+    .unitProcessArea .fileListArea {
+        height: 40%;
+    }
+}
+

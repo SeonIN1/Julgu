@@ -10268,12 +10268,12 @@ h3 {
   }
 }
 #wrapper {
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 #sidebar-wrapper {
   min-height: 100vh;
-  margin-left: -15rem;
+  /* margin-left: -15rem; */
   transition: margin 0.25s ease-out;
 }
 
